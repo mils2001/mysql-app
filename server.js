@@ -9,8 +9,8 @@ app.use(express.json());
 const db = mysql.createConnection({
   host: process.env.DB_HOST || 'localhost',
   user: process.env.DB_USER || 'root',
-  password: process.env.DB_PASSWORD || 'Awilo9701',
-  database: process.env.DB_NAME || 'mydb'
+  password: process.env.DB_PASSWORD || 'NewPassword',
+  database: process.env.DB_NAME || 'moondb'
 });
 
 // Connect to the database
@@ -35,7 +35,7 @@ app.get('/users', (req, res) => {
 });
 
 // Start the server
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 3002;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
 });
