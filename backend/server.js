@@ -3,17 +3,17 @@ const mysql = require('mysql2');
 require('dotenv').config();
 
 const app = express();
-const PORT = 3005;
+const PORT = 3006;
 
 // Middleware to parse JSON data
 app.use(express.json());
 
 // MySQL connection
 const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: process.env.localhost,
+  user: process.env.root,
+  password: process.env.NewPassword,
+  database: process.env.moondb,
 });
 
 // Check database connection
