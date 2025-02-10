@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 require('dotenv').config();
 
 const app = express();
-const PORT = 3001;
+const PORT = 3005;
 
 // Middleware to parse JSON data
 app.use(express.json());
