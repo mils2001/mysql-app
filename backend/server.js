@@ -6,7 +6,7 @@ console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
  // Load environment variables from .env file
 
 const app = express();
-const PORT = 3009;
+const PORT = 3010;
 
 // Middleware to parse JSON data
 app.use(express.json());
