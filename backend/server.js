@@ -1,6 +1,9 @@
 const express = require('express');
 const mysql = require('mysql2');
-require('dotenv').config(); // Load environment variables from .env file
+require('dotenv').config();
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+ // Load environment variables from .env file
 
 const app = express();
 const PORT = 3009;
@@ -10,11 +13,12 @@ app.use(express.json());
 
 // MySQL connection using environment variables
 const connection = mysql.createConnection({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
+  host: process.env.DB_HOST || 'localhost',
+  user: process.env.DB_USER || 'root',
+  password: process.env.DB_PASSWORD || 'NewPassword',
+  database: process.env.DB_NAME || 'moondb',
 });
+
 
 connection.connect((err) => {
   if (err) {
