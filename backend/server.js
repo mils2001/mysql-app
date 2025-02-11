@@ -3,7 +3,7 @@ const mysql = require('mysql2');
 require('dotenv').config(); // Load environment variables from .env file
 
 const app = express();
-const PORT = 3008;
+const PORT = 3009;
 
 // Middleware to parse JSON data
 app.use(express.json());
