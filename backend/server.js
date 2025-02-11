@@ -1,37 +1,41 @@
 const express = require('express');
 const mysql = require('mysql2');
-require('dotenv').config();
+require('dotenv').config(); // Load environment variables from .env file
 
 const app = express();
-const PORT = 3006;
+const PORT = 3008;
 
 // Middleware to parse JSON data
 app.use(express.json());
 
-// MySQL connection
+// MySQL connection using environment variables
 const connection = mysql.createConnection({
-  host: process.env.localhost,
-  user: process.env.root,
-  password: process.env.NewPassword,
-  database: process.env.moondb,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
 });
 
-// Check database connection
 connection.connect((err) => {
   if (err) {
     console.error('Error connecting to MySQL:', err);
-  } else {
-    console.log('Connected to MySQL');
+    return;
   }
+  console.log('Connected to MySQL');
 });
+
+// CRUD API Endpoints for 'users' table
 
 // Create a new user
 app.post('/users', (req, res) => {
   const { name, email } = req.body;
   const sql = 'INSERT INTO users (name, email) VALUES (?, ?)';
-  connection.query(sql, [name, email], (err, result) => {
-    if (err) return res.status(500).send(err);
-    res.send({ message: 'User added successfully!', userId: result.insertId });
+  connection.query(sql, [name, email], (err, results) => {
+    if (err) {
+      console.error('Error inserting user:', err);
+      return res.status(500).send('Error creating user');
+    }
+    res.status(201).send({ message: 'User created', userId: results.insertId });
   });
 });
 
@@ -39,19 +43,44 @@ app.post('/users', (req, res) => {
 app.get('/users', (req, res) => {
   const sql = 'SELECT * FROM users';
   connection.query(sql, (err, results) => {
-    if (err) return res.status(500).send(err);
-    res.send(results);
+    if (err) {
+      console.error('Error fetching users:', err);
+      return res.status(500).send('Error fetching users');
+    }
+    res.status(200).json(results);
+  });
+});
+
+// Get a single user by ID
+app.get('/users/:id', (req, res) => {
+  const { id } = req.params;
+  const sql = 'SELECT * FROM users WHERE id = ?';
+  connection.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error('Error fetching user:', err);
+      return res.status(500).send('Error fetching user');
+    }
+    if (results.length === 0) {
+      return res.status(404).send('User not found');
+    }
+    res.status(200).json(results[0]);
   });
 });
 
 // Update a user by ID
 app.put('/users/:id', (req, res) => {
-  const { name, email } = req.body;
   const { id } = req.params;
+  const { name, email } = req.body;
   const sql = 'UPDATE users SET name = ?, email = ? WHERE id = ?';
-  connection.query(sql, [name, email, id], (err, result) => {
-    if (err) return res.status(500).send(err);
-    res.send({ message: 'User updated successfully!' });
+  connection.query(sql, [name, email, id], (err, results) => {
+    if (err) {
+      console.error('Error updating user:', err);
+      return res.status(500).send('Error updating user');
+    }
+    if (results.affectedRows === 0) {
+      return res.status(404).send('User not found');
+    }
+    res.status(200).send('User updated successfully');
   });
 });
 
@@ -59,9 +88,15 @@ app.put('/users/:id', (req, res) => {
 app.delete('/users/:id', (req, res) => {
   const { id } = req.params;
   const sql = 'DELETE FROM users WHERE id = ?';
-  connection.query(sql, [id], (err, result) => {
-    if (err) return res.status(500).send(err);
-    res.send({ message: 'User deleted successfully!' });
+  connection.query(sql, [id], (err, results) => {
+    if (err) {
+      console.error('Error deleting user:', err);
+      return res.status(500).send('Error deleting user');
+    }
+    if (results.affectedRows === 0) {
+      return res.status(404).send('User not found');
+    }
+    res.status(200).send('User deleted successfully');
   });
 });
 
