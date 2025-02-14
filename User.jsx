@@ -9,7 +9,7 @@ const AddUserForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3009/add-user', { name, email });
+      const response = await axios.post('http://localhost:3010/add-user', { name, email });
       setMessage(response.data.message);
       setName('');
       setEmail('');
