@@ -1,11 +1,28 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>My Node MySQL App</title>
-  </head>
-  <body>
-    <div id="root"></div>
-  </body>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Book Lending App</title>
+  <link rel="stylesheet" href="styles.css">
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body>
+  <div class="app-container">
+    <h1>📚 Book Lending App</h1>
+    <form id="add-book-form">
+      <h2>Add a Book</h2>
+      <input type="text" id="title" placeholder="Book Title" required />
+      <input type="text" id="author" placeholder="Author" required />
+      <button type="submit">Add Book</button>
+    </form>
+
+    <div id="book-list">
+      <h2>Available Books</h2>
+      <ul id="books"></ul>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
 </html>
